@@ -13,6 +13,11 @@ interface ExpenseFormProps {
   onSubmit: (data: ExpenseFormData) => Promise<void>;
   onCancel?: () => void;
   submitLabel?: string;
+  /**
+   * Category names to populate the dropdown. Falls back to the predefined
+   * list so the form keeps working before categories load from the backend.
+   */
+  categories?: readonly string[];
 }
 
 export function ExpenseForm({
@@ -20,6 +25,7 @@ export function ExpenseForm({
   onSubmit,
   onCancel,
   submitLabel = "Add Expense",
+  categories = EXPENSE_CATEGORIES,
 }: ExpenseFormProps) {
   const { formData, errors, isSubmitting, handleChange, handleSubmit } =
     useExpenseForm({
@@ -39,7 +45,10 @@ export function ExpenseForm({
     marginTop: "0.5rem",
   };
 
-  const categoryOptions = EXPENSE_CATEGORIES.map((category) => ({
+  // Fall back to the predefined list until categories load from the backend.
+  const categoryNames = categories.length > 0 ? categories : EXPENSE_CATEGORIES;
+
+  const categoryOptions = categoryNames.map((category) => ({
     value: category,
     label: category,
   }));
