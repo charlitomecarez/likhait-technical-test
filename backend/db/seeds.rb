@@ -111,6 +111,15 @@ expense_templates = {
   ]
 }
 
+# Payer names used when generating expenses
+payer_names = [
+  'John Doe',
+  'Jane Smith',
+  'Mike Johnson',
+  'Sarah Lee',
+  'Emily Chen'
+]
+
 # Start date: January 1, 2024
 # End date: February 18, 2026
 start_date = Date.new(2024, 1, 1)
@@ -145,7 +154,7 @@ while current_date <= end_date
         description: template[:description],
         amount: amount,
         category: category,
-        date: current_date,
+        payer_name: payer_names.sample,
         created_at: current_date,
         updated_at: current_date
       )

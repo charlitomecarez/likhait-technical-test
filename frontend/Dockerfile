@@ -5,8 +5,9 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies from the lockfile (installs the platform-correct
+# rollup binary, e.g. @rollup/rollup-linux-arm64-musl on Alpine)
+RUN npm ci
 
 # Copy the rest of the application
 COPY . .

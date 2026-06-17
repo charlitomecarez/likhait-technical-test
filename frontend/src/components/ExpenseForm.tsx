@@ -80,6 +80,17 @@ export function ExpenseForm({
       />
 
       <TextField
+        label="Payer"
+        type="text"
+        placeholder="Who paid?"
+        value={formData.payer_name}
+        onChange={(e) => handleChange("payer_name", e.target.value)}
+        error={errors.payer_name}
+        fullWidth
+        required
+      />
+
+      <TextField
         label="Date"
         type="date"
         value={formData.date}
