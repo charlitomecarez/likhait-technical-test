@@ -23,6 +23,18 @@ RSpec.describe "Api::Expenses", type: :request do
       expect(json.first["id"]).to eq(expense2.id)
       expect(json.last["id"]).to eq(expense1.id)
     end
+
+    it "returns the most recently created expense first when expense dates are equal" do
+      same_date = 3.days.ago.beginning_of_day
+      older = Expense.create!(description: "Older same-day", amount: 10.00, category: food_category, payer_name: "Alice", created_at: same_date)
+      newer = Expense.create!(description: "Newer same-day", amount: 20.00, category: food_category, payer_name: "Bob", created_at: same_date)
+
+      get "/api/expenses"
+
+      json = JSON.parse(response.body)
+      ids = json.map { |e| e["id"] }
+      expect(ids.index(newer.id)).to be < ids.index(older.id)
+    end
   end
 
   describe "POST /api/expenses" do
