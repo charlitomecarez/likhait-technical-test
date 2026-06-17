@@ -55,9 +55,10 @@ services:
     command: >
       sh -c "
         bundle install &&
-        rails db:migrate &&
-        rails db:seed &&
-        rails server -b 0.0.0.0
+        bundle exec rails db:migrate &&
+        bundle exec rails db:seed &&
+        rm -f tmp/pids/server.pid &&
+        bundle exec rails server -b 0.0.0.0
       "
     networks:
       - expense_network
@@ -75,15 +76,15 @@ services:
       - backend
     volumes:
       - ./frontend:/app
-      - frontend_node_modules:/app/node_modules
-    command: npm run dev -- --host
+      # no named volume here — let npm install fresh inside the container
+    command: sh -c "rm -rf node_modules package-lock.json && npm install && npm run dev -- --host"
     networks:
       - expense_network
 
 volumes:
   mysql_data:
   backend_gems:
-  frontend_node_modules:
+  # removed frontend_node_modules
 
 networks:
   expense_network:
