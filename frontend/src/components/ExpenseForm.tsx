@@ -7,6 +7,7 @@ import { ExpenseFormData } from "../types";
 import { EXPENSE_CATEGORIES } from "../constants/categories";
 import { TextField, SelectBox, Button } from "../vibes";
 import { useExpenseForm } from "../hooks/useExpenseForm";
+import { formatDate } from "../utils/expenseUtils";
 
 interface ExpenseFormProps {
   initialData?: Partial<ExpenseFormData>;
@@ -43,6 +44,9 @@ export function ExpenseForm({
     value: category,
     label: category,
   }));
+
+  // Expenses can only be recorded for today or a past date.
+  const today = formatDate(new Date());
 
   return (
     <form onSubmit={handleSubmit} style={formStyle}>
@@ -93,6 +97,7 @@ export function ExpenseForm({
       <TextField
         label="Date"
         type="date"
+        max={today}
         value={formData.date}
         onChange={(e) => handleChange("date", e.target.value)}
         error={errors.date}
